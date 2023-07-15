@@ -2,6 +2,8 @@
 """FileStorage modeule"""
 import json
 from models import base_model
+
+
 class FileStorage():
     """class FileStorage
     Attributes:
@@ -29,7 +31,7 @@ class FileStorage():
     def save(self):
         """save method serializes __object to JSON file at __filepath"""
         with open(self.__file_path, "w", encoding="utf-8") as file1:
-            dic = {k : v.to_dict() for k, v in self.__objects.items()}
+            dic = {k: v.to_dict() for k, v in self.__objects.items()}
             json.dump(dic, file1)
 
     def reload(self):
