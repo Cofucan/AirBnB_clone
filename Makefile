@@ -1,5 +1,7 @@
 .PHONY: executable
 
 executable:
-	chmod +x *.py
-	# @. chmod +x $(find . -type f -name "*.py")
+	chmod +x $(shell find . -name "*.py")
+
+pycodestyle:
+	pycodestyle $(shell find . -name "*.py")

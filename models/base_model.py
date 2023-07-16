@@ -6,30 +6,34 @@ attributes/methods for other classes.
 from datetime import datetime
 import uuid
 
+import models
+
 
 class BaseModel:
     """This defines a BaseModel class"""
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """..."""
+        self.id: str = str(uuid.uuid4())
+        self.created_at: datetime = datetime.now()
+        self.updated_at: datetime = datetime.now()
+
         if kwargs:
             for key, value in kwargs.items():
                 if key == "__class__":
                     continue
                 if key in ["created_at", "updated_at"]:
-                    setattr(
-                        self,
-                        key,
-                        datetime.strptime(str(value), "%Y-%m-%dT%H:%M:%S.%f"),
-                    )
+                    val = datetime.strptime(str(value), "%Y-%m-%dT%H:%M:%S.%f")
+                    setattr(self, key, val)
                 else:
                     setattr(self, key, value)
         else:
-            self.id: str = str(uuid.uuid4())
-            self.created_at: datetime = datetime.now()
+            models.storage.new(self)
 
-        self.save()
+        # self.save()
 
     def __str__(self) -> str:
+        """..."""
         return f"{[self.__class__.__name__]} ({self.id}) {self.__dict__}"
 
     def save(self) -> None:
@@ -38,6 +42,7 @@ class BaseModel:
         the current datetime. This function does not take any
         parameters and does not return anything.
         """
+        models.storage.save()
         self.updated_at = datetime.now()
 
     def to_dict(self) -> dict:
