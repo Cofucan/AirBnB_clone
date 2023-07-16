@@ -9,12 +9,12 @@ class HBNBCommand(cmd.Cmd):
     """A simple commandline interpreter for HBNB."""
     prompt = '(hbnb) '
 
-    def do_EOF(self, line: str) -> bool:
+    def do_EOF(self, line):
         """Enables exiting the program with Crtl-D
         """
         return True
 
-    def do_quit(self, line: str) -> bool:
+    def do_quit(self, line) -> bool:
         """Quit command to exit the program
         """
         return True
