@@ -10,11 +10,13 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
 
     def do_EOF(self, line: str) -> bool:
-        """Enables exiting the program with Crtl-D"""
+        """Enables exiting the program with Crtl-D
+        """
         return True
 
     def do_quit(self, line: str) -> bool:
-        """Quit command to exit the program"""
+        """Quit command to exit the program
+        """
         return True
 
 
