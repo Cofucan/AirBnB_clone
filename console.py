@@ -6,16 +6,16 @@ import cmd
 
 
 class HBNBCommand(cmd.Cmd):
-    """command processor class."""
+    """A simple commandline interpreter for HBNB."""
     prompt = '(hbnb) '
 
-    def do_quit(self, line):
-        """Quit command to exit the program.
+    def do_quit(self, line: str) -> bool:
+        """Quit command to exit the program
         """
         return True
 
-    def do_EOF(self, line):
-        """Quit command to exit the program.
+    def do_EOF(self, line: str) -> bool:
+        """Quit command to exit the program
         """
         return True
 
