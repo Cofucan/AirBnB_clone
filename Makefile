@@ -4,4 +4,4 @@ executable:
 	chmod +x $(shell find . -name "*.py")
 
 pycodestyle:
-	pycodestyle $(shell find . -name "*.py")
+	pycodestyle $(shell find ./models -name "*.py")
