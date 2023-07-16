@@ -32,10 +32,6 @@ class BaseModel:
 
         # self.save()
 
-    def __str__(self) -> str:
-        """..."""
-        return f"{[self.__class__.__name__]} ({self.id}) {self.__dict__}"
-
     def save(self) -> None:
         """
         Save the object by updating the `updated_at` attribute with
@@ -62,3 +58,8 @@ class BaseModel:
         properties["updated_at"] = self.updated_at.isoformat()
 
         return properties
+
+    def __str__(self) -> str:
+        """..."""
+        classname = self.__class__.__name__
+        return f"[{classname}] ({self.id}) {self.__dict__}"
