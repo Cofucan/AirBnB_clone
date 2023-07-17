@@ -19,32 +19,34 @@ class HBNBCommand(cmd.Cmd):
     """
     class HBNBCommand
     """
+
     prompt = "(hbnb) "
 
     """ dict containing all the possible classes to be created """
-    __classes = {'BaseModel': BaseModel, 'Place': Place,
-                 'User': User, 'State': State,
-                 'City': City, 'Amenity': Amenity,
-                 'Review': Review}
+    __classes = {
+        "BaseModel": BaseModel,
+        "Place": Place,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Review": Review,
+    }
 
     def do_quit(self, line):
-        """Quit command to exit the program
-        """
-        return (True)
+        """Quit command to exit the program"""
+        return True
 
     def help_quit(line):
-        """Help message for quit()
-        """
+        """Help message for quit()"""
         print("Quit command to exit the program\n")
 
     def do_EOF(self, line):
-        """Cleanly exits from the interpreter
-        """
-        return (True)
+        """Cleanly exits from the interpreter"""
+        return True
 
     def help_EOF(line):
-        """Help message for EOF()
-        """
+        """Help message for EOF()"""
         print("Cleanly exits from the interpreter\n")
 
     def do_create(self, line):
@@ -67,8 +69,10 @@ class HBNBCommand(cmd.Cmd):
         Help message for the "create" command
         """
         print("Usage: create <class_name>")
-        print("creates an object specified by class_name"
-              " and save it to a json file\n")
+        print(
+            "creates an object specified by class_name"
+            " and save it to a json file\n"
+        )
 
     def do_show(self, line):
         """
@@ -85,7 +89,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             objects_dict = storage.all()
             search_key = arguments[0] + "." + arguments[1]
-            if (search_key in objects_dict):
+            if search_key in objects_dict:
                 print(objects_dict[search_key])
             else:
                 print("** no instance found **")
@@ -112,7 +116,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             objects_dict = storage.all()
             search_key = arguments[0] + "." + arguments[1]
-            if (search_key in objects_dict):
+            if search_key in objects_dict:
                 del objects_dict[search_key]
                 storage.save()
             else:
@@ -155,10 +159,14 @@ class HBNBCommand(cmd.Cmd):
         """
         prints help method for the update command
         """
-        print("Usage: update <class name> <id> <attribute name>"
-              " \"<attribute value>\"")
-        print("Updates an instance of class_name and id by adding"
-              " or updating attribute\n")
+        print(
+            "Usage: update <class name> <id> <attribute name>"
+            ' "<attribute value>"'
+        )
+        print(
+            "Updates an instance of class_name and id by adding"
+            " or updating attribute\n"
+        )
 
     def do_all(self, line):
         arguments = line.split() if line else []
@@ -183,9 +191,11 @@ class HBNBCommand(cmd.Cmd):
         Prints the message for the "all" command
         """
         print("Usage <all> <class_name>")
-        print("prints all the instances of class_names"
-              " or all the instances stored if no argument"
-              " is provided\n")
+        print(
+            "prints all the instances of class_names"
+            " or all the instances stored if no argument"
+            " is provided\n"
+        )
 
     def default(self, line):
         """
@@ -228,13 +238,17 @@ class HBNBCommand(cmd.Cmd):
                 if len(update_args) == 2 and update_args[1].startswith("{"):
                     attr_dict = eval(update_args[1])
                     for key, value in attr_dict:
-                        self.do_update("{} {} {} {}".format(
-                            cls, obj_id, key, value))
+                        self.do_update(
+                            "{} {} {} {}".format(cls, obj_id, key, value)
+                        )
                 else:
                     attr_name = update_args[1].strip('"')
                     attr_value = update_args[2].strip('"')
-                    self.do_update("{} {} {} {}".format(
-                        cls, obj_id, attr_name, attr_value))
+                    self.do_update(
+                        "{} {} {} {}".format(
+                            cls, obj_id, attr_name, attr_value
+                        )
+                    )
         except IndexError:
             print("Invalid!")
 
