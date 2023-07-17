@@ -17,10 +17,15 @@ class FileStorage:
 
     __file_path: str = "file.json"
     __objects: dict = {}
-    class_dict = {"BaseModel": BaseModel, "User": User, "Place": Place,
-                  "Amenity": Amenity, "City": City, "Review": Review,
-                  "State": State}
-
+    class_dict = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "Place": Place,
+        "Amenity": Amenity,
+        "City": City,
+        "Review": Review,
+        "State": State,
+    }
 
     def all(self) -> dict:
         """..."""
@@ -28,7 +33,8 @@ class FileStorage:
 
     def new(self, obj: object) -> None:
         """..."""
-        key: str = f"{obj.__class__.__name__}.{obj.id}"
+        obj_name = obj.__class__.__name__
+        key: str = f"{obj_name}.{obj.id}"
         type(self).__objects[key] = obj
 
     def save(self) -> None:
@@ -41,9 +47,9 @@ class FileStorage:
 
     def reload(self) -> None:
         """..."""
-        if os.path.isfile(type(self).__file_path):
-            with open(self.__file_path, 'r', encoding="UTF-8") as f:
-                new_obj_dict = json.load(f)
+        if os.path.exists(type(self).__file_path):
+            with open(self.__file_path, "r", encoding="UTF-8") as file:
+                new_obj_dict = json.load(file)
             for key, value in new_obj_dict.items():
-                obj = self.class_dict[value['__class__']](**value)
+                obj = self.class_dict[value["__class__"]](**value)
                 self.__objects[key] = obj

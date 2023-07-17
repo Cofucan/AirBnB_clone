@@ -131,7 +131,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         arg_list = arg.split()
-        if arg_list[0] not in models.classes.keys():
+        if arg_list[0] not in self.__classes:
             print("** class doesn't exist **")
             return
         if len(arg_list) < 2:

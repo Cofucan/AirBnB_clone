@@ -2,7 +2,6 @@
 """Define the city class"""
 
 from models.base_model import BaseModel
-import uuid
 
 
 class City(BaseModel):

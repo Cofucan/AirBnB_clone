@@ -2,7 +2,6 @@
 """Define the amenity class"""
 
 from models.base_model import BaseModel
-import uuid
 
 
 class Amenity(BaseModel):

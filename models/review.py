@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Define the review class"""
 
-import uuid
 from models.base_model import BaseModel
 
 
