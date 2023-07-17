@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 """Defines unittests for models/engine/file_storage.py.
 Unittest classes:
-    TestFileStorage_instantiation
-    TestFileStorage_methods
+    TestFileStorageInstantiation
+    TestFileStorageMethods
 """
 
 import contextlib
 import os
-import json
 import unittest
-from datetime import datetime
+
 import models
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
@@ -92,7 +91,9 @@ class TestFileStorageMethods(unittest.TestCase):
         self.assertIn(self.place, models.storage.all().values())
         self.assertIn(f"City.{self.city.id}", models.storage.all().keys())
         self.assertIn(self.city, models.storage.all().values())
-        self.assertIn(f"Amenity.{self.amenity.id}", models.storage.all().keys())
+        self.assertIn(
+            f"Amenity.{self.amenity.id}", models.storage.all().keys()
+        )
         self.assertIn(self.amenity, models.storage.all().values())
         self.assertIn(f"Review.{self.review.id}", models.storage.all().keys())
         self.assertIn(self.review, models.storage.all().values())
