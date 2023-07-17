@@ -16,7 +16,7 @@ class BaseModel:
         """..."""
         self.id: str = str(uuid.uuid4())
         self.created_at: datetime = datetime.now()
-        self.updated_at: datetime = datetime.now()
+        self.updated_at: datetime = self.created_at
 
         if kwargs:
             for key, value in kwargs.items():
@@ -38,8 +38,8 @@ class BaseModel:
         the current datetime. This function does not take any
         parameters and does not return anything.
         """
-        models.storage.save()
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self) -> dict:
         """
