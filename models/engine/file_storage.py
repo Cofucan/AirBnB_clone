@@ -4,6 +4,12 @@ import json
 import os
 
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage:
@@ -11,6 +17,10 @@ class FileStorage:
 
     __file_path: str = "file.json"
     __objects: dict = {}
+    class_dict = {"BaseModel": BaseModel, "User": User, "Place": Place,
+                  "Amenity": Amenity, "City": City, "Review": Review,
+                  "State": State}
+
 
     def all(self) -> dict:
         """..."""
@@ -32,11 +42,8 @@ class FileStorage:
     def reload(self) -> None:
         """..."""
         if os.path.isfile(type(self).__file_path):
-            with open(
-                type(self).__file_path, mode="r", encoding="utf-8"
-            ) as file:
-                objs: dict = json.load(file)
-                for value in objs.values():
-                    cls_name = value["__class__"]
-                    cls = eval(cls_name)
-                    self.new(cls(**value))
+            with open(self.__file_path, 'r', encoding="UTF-8") as f:
+                new_obj_dict = json.load(f)
+            for key, value in new_obj_dict.items():
+                obj = self.class_dict[value['__class__']](**value)
+                self.__objects[key] = obj

@@ -3,9 +3,10 @@
 """
 Command line interpreter for AirBnB
 """
+import cmd
+import models
 from models.base_model import BaseModel
 from models.place import Place
-import cmd
 from models import storage
 from models.user import User
 from models.state import State
@@ -124,35 +125,31 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: destroy <class_name> <id>")
         print("Removes the specified class\n")
 
-    def do_update(self, line):
-        """
-        Updates an instance based on the class name and id
-        by adding or updating attribute
-        """
-        arguments = line.split() if line else []
-        if not arguments:
+    def do_update(self, arg):
+        """Updates an instance based on the class name and id"""
+        if not arg:
             print("** class name missing **")
-        elif arguments[0] not in self.__classes:
-            print("** class doesn't exist")
-        elif len(arguments) == 1:
+            return
+        arg_list = arg.split()
+        if arg_list[0] not in models.classes.keys():
+            print("** class doesn't exist **")
+            return
+        if len(arg_list) < 2:
             print("** instance id missing **")
-        else:
-            objects_dict = storage.all()
-            search_key = arguments[0] + "." + arguments[1]
-            if search_key not in objects_dict:
-                print("** no instance found **")
-            elif len(arguments) == 2:
-                print("** attribute name missing **")
-            elif len(arguments) == 3:
-                print("** value missing **")
-            else:
-                attr_name = arguments[2]
-                val_type = type(arguments[3])
-                attr_value = val_type(arguments[3])
-                obj_dict = objects_dict[search_key].__dict__
-                value = arguments[3].strip('"')
-                obj_dict[attr_name] = attr_value
-                storage.save()
+            return
+        key = "{}.{}".format(arg_list[0], arg_list[1])
+        objects = storage.all()
+        if key not in objects:
+            print("** no instance found **")
+            return
+        if len(arg_list) < 3:
+            print("** attribute name missing **")
+            return
+        if len(arg_list) < 4:
+            print("** value missing **")
+            return
+        setattr(objects[key], arg_list[2], arg_list[3])
+        storage.save()
 
     def help_update(line):
         """
