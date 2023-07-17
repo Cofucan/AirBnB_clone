@@ -58,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
             if line in self.__classes:
                 new_object = self.__classes[line]()
                 new_object.save()
-                print("{}".format(new_object.id))
+                print(f"{new_object.id}")
             else:
                 print("** class doesn't exist **")
         else:
@@ -88,7 +88,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             objects_dict = storage.all()
-            search_key = arguments[0] + "." + arguments[1]
+            search_key = f'{arguments[0]}.{arguments[1]}'
             if search_key in objects_dict:
                 print(objects_dict[search_key])
             else:
@@ -129,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: destroy <class_name> <id>")
         print("Removes the specified class\n")
 
-    def do_update(self, arg):
+    def do_update(self, arg: str) -> None:
         """Updates an instance based on the class name and id"""
         if not arg:
             print("** class name missing **")
@@ -141,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
         if len(arg_list) < 2:
             print("** instance id missing **")
             return
-        key = "{}.{}".format(arg_list[0], arg_list[1])
+        key = f"{arg_list[0]}.{arg_list[1]}"
         objects = storage.all()
         if key not in objects:
             print("** no instance found **")
@@ -197,12 +197,11 @@ class HBNBCommand(cmd.Cmd):
             " is provided\n"
         )
 
-    def default(self, line):
+    def default(self, line: str) -> None:
         """
         Method called when a command is not
-        used a s first argument
+        used as first argument
         """
-        all = []
         args = line.split(".") if line else []
         objects_dict = storage.all()
         try:
@@ -226,33 +225,33 @@ class HBNBCommand(cmd.Cmd):
                 args = args[1].split(")")
                 obj_id = args[0].strip('"').strip(")").strip('"')
                 if comd == "show":
-                    self.do_show("{} {}".format(cls, obj_id))
+                    self.do_show(f"{cls} {obj_id}")
                 elif comd == "destroy":
-                    self.do_destroy("{} {}".format(cls, obj_id))
+                    self.do_destroy(f"{cls} {obj_id}")
 
             elif comd.startswith("update"):
                 args = comd.split("(")
                 comd = args[0]
-                update_args = args[1].split(")")[0].split(", ")
-                obj_id = update_args[0].strip('"')
-                if len(update_args) == 2 and update_args[1].startswith("{"):
-                    attr_dict = eval(update_args[1])
-                    for key, value in attr_dict:
-                        self.do_update(
-                            "{} {} {} {}".format(cls, obj_id, key, value)
-                        )
+                curly_index = args[1].find("{")
+                obj_id = args[1][:curly_index].strip(', ').strip('"')
+                dict_args = args[1][curly_index:].split(")")
+                if dict_args[0].startswith('{') and dict_args[0].endswith("}"):
+                    attr_dict = eval(dict_args[0])
+                    print(obj_id)
+                    print(dict_args)
+                    print(dict_args[0])
+                    print(attr_dict)
+                    print(type(attr_dict))
+                    for key, value in attr_dict.items():
+                        self.do_update(f"{cls} {obj_id} {key} {value}")
                 else:
-                    attr_name = update_args[1].strip('"')
-                    attr_value = update_args[2].strip('"')
-                    self.do_update(
-                        "{} {} {} {}".format(
-                            cls, obj_id, attr_name, attr_value
-                        )
-                    )
+                    attr_name = dict_args[1].strip('"')
+                    attr_value = dict_args[2].strip('"')
+                    self.do_update(f"{cls} {obj_id} {attr_name} {attr_value}")
         except IndexError:
             print("Invalid!")
 
-    def emptyline(self):
+    def emptyline(self) -> bool:
         """Does Nothing"""
         pass
 

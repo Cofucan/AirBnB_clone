@@ -11,13 +11,13 @@ Unittest classes:
     TestHBNBCommand_update
 """
 import os
-from io import StringIO
 import unittest
+from io import StringIO
 from unittest.mock import patch
 
+from console import HBNBCommand
 from models import storage
 from models.engine.file_storage import FileStorage
-from console import HBNBCommand
 
 
 class TestHBNBCommandPrompt(unittest.TestCase):
