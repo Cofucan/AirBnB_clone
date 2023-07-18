@@ -69,10 +69,6 @@ class HBNBCommand(cmd.Cmd):
         Help message for the "create" command
         """
         print("Usage: create <class_name>")
-        print(
-            "creates an object specified by class_name"
-            " and save it to a json file\n"
-        )
 
     def do_show(self, line):
         """
@@ -98,10 +94,9 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints the help message for the "show" command
         """
-        print("Usage: show <class_name> <id>")
-        print("prints the string representation of the specified instance\n")
+        print("Usage: show <class_name> <id> or <class>.show(<id>)")
 
-    def do_destroy(self, line):
+    def do_destroy(self, line: str) -> None:
         """
         Deletes an instance based on the class name and id
         and saves changes to storage
@@ -115,7 +110,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             objects_dict = storage.all()
-            search_key = arguments[0] + "." + arguments[1]
+            search_key = f"{arguments[0]}.{arguments[1]}"
             if search_key in objects_dict:
                 del objects_dict[search_key]
                 storage.save()
@@ -126,8 +121,8 @@ class HBNBCommand(cmd.Cmd):
         """
         prints the help method for the "destroy" command
         """
-        print("Usage: destroy <class_name> <id>")
-        print("Removes the specified class\n")
+        print("Usage: destroy <class_name> <id> or <class>.destroy(<id>)")
+        print("Removes the specified class")
 
     def do_update(self, arg: str) -> None:
         """Updates an instance based on the class name and id"""
@@ -190,12 +185,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints the message for the "all" command
         """
-        print("Usage <all> <class_name>")
-        print(
-            "prints all the instances of class_names"
-            " or all the instances stored if no argument"
-            " is provided\n"
-        )
+        print("Usage: all or all <class> or <class>.all()")
 
     def default(self, line: str) -> None:
         """
@@ -208,7 +198,9 @@ class HBNBCommand(cmd.Cmd):
             cls = args[0]
             if len(args) > 1:
                 comd = args[1]
-            if cls not in self.__classes:
+            if not cls:
+                print("** class name missing **")
+            elif cls not in self.__classes:
                 print("** class doesn't exist **")
             elif comd == "all()":
                 self.do_all(cls)
@@ -234,20 +226,20 @@ class HBNBCommand(cmd.Cmd):
                 comd = args[0]
                 curly_index = args[1].find("{")
                 obj_id = args[1][:curly_index].strip(', ').strip('"')
-                dict_args = args[1][curly_index:].split(")")
-                if dict_args[0].startswith('{') and dict_args[0].endswith("}"):
-                    attr_dict = eval(dict_args[0])
-                    print(obj_id)
-                    print(dict_args)
-                    print(dict_args[0])
-                    print(attr_dict)
-                    print(type(attr_dict))
-                    for key, value in attr_dict.items():
-                        self.do_update(f"{cls} {obj_id} {key} {value}")
+                if not obj_id or args[1] == ")":  # or curly_index == -1:
+                    print("** instance id missing **")
+                elif not args[1].startswith('"') and '"' not in args[1]:
+                    print("** no instance found **")
                 else:
-                    attr_name = dict_args[1].strip('"')
-                    attr_value = dict_args[2].strip('"')
-                    self.do_update(f"{cls} {obj_id} {attr_name} {attr_value}")
+                    dict_args = args[1][curly_index:].split(")")
+                    if dict_args[0].startswith('{') and dict_args[0].endswith("}"):
+                        attr_dict = eval(dict_args[0])
+                        for key, value in attr_dict.items():
+                            self.do_update(f"{cls} {obj_id} {key} {value}")
+                    else:
+                        attr_name = dict_args[1].strip('"')
+                        attr_value = dict_args[2].strip('"')
+                        self.do_update(f"{cls} {obj_id} {attr_name} {attr_value}")
         except IndexError:
             print("Invalid!")
 

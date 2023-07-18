@@ -10,4 +10,4 @@ class Amenity(BaseModel):
     Attributes:
         name (str): state name
     """
-    name = ""
+    name: str = ""
