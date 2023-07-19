@@ -14,7 +14,7 @@ import models
 from models.state import State
 
 
-class TestState_instantiation(unittest.TestCase):
+class TestStateInstantiation(unittest.TestCase):
     """Unittests for testing instantiation of the State class."""
 
     def test_no_args_instantiates(self) -> None:
