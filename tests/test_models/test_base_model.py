@@ -5,6 +5,8 @@ Unittest classes:
     TestBaseModel_save
     TestBaseModel_to_dict
 """
+
+import contextlib
 import os
 import unittest
 from datetime import datetime
@@ -90,20 +92,14 @@ class TestBaseModelSave(unittest.TestCase):
     """Unittests for testing save method of the BaseModel class."""
 
     def setUp(self) -> None:
-        try:
+        with contextlib.suppress(IOError):
             os.rename("file.json", "tmp")
-        except IOError:
-            pass
 
     def tearDown(self) -> None:
-        try:
+        with contextlib.suppress(IOError):
             os.remove("file.json")
-        except IOError:
-            pass
-        try:
+        with contextlib.suppress(IOError):
             os.rename("tmp", "file.json")
-        except IOError:
-            pass
 
     def test_one_save(self) -> None:
         base = BaseModel()
